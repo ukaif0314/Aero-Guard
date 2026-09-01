@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+websockets
+pydantic
+numpy
+torch
+scikit-learn
+python-multipart
