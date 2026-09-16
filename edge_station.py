@@ -5,79 +5,126 @@ import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from dataclasses import dataclass, asdict
 
-# ==========================================
-# 1. ENGINE PROFILE REGISTRY & DIGITAL TWIN
-# ==========================================
-@dataclass
-class EngineSpec:
-    model: str
-    cylinders: int
-    max_cht: float        # Celsius
-    min_oil_press: float  # Bar
-    nominal_rpm: int
-
-ENGINE_REGISTRY = {
-    "TAPAS-01": EngineSpec("Rotax 914 F Turbo", cylinders=4, max_cht=135.0, min_oil_press=1.5, nominal_rpm=5500),
-    "RUSTOM-02": EngineSpec("Lycoming O-320", cylinders=4, max_cht=240.0, min_oil_press=2.0, nominal_rpm=2700),
-    "NISHANT-03": EngineSpec("Rotary/Twin Benchmark", cylinders=2, max_cht=180.0, min_oil_press=1.8, nominal_rpm=6500)
+# ==============================================================================
+# ACCURATE TAKEOFF BENCHMARK FLIGHT ENDURANCE (IN HOURS)
+# ==============================================================================
+FLEET_FLIGHT_PROFILES = {
+    "TAPAS-01": {
+        "engine": "Rotax 914 F Turbocharged",
+        "takeoff_avg_endurance_hours": 24.0,  # 24 Hours standard MALE patrol
+        "max_cht": 135.0,
+        "min_oil": 1.5,
+        "nominal_rpm": 5500,
+        "cylinders": 4
+    },
+    "RUSTOM-02": {
+        "engine": "Lycoming O-320",
+        "takeoff_avg_endurance_hours": 22.0,  # 22 Hours standard loiter
+        "max_cht": 240.0,
+        "min_oil": 2.0,
+        "nominal_rpm": 2700,
+        "cylinders": 4
+    },
+    "NISHANT-03": {
+        "engine": "REI AR-731 Rotary/Twin",
+        "takeoff_avg_endurance_hours": 4.5,   # 4.5 Hours tactical loiter
+        "max_cht": 180.0,
+        "min_oil": 1.8,
+        "nominal_rpm": 6500,
+        "cylinders": 2
+    }
 }
 
+def compute_accurate_flight_time(uav_id: str, scenario: str):
+    profile = FLEET_FLIGHT_PROFILES.get(uav_id)
+    if not profile:
+        return "0h 0m", 0.0
+
+    # Total nominal flight endurance from takeoff in minutes
+    takeoff_baseline_mins = profile["takeoff_avg_endurance_hours"] * 60.0
+
+    # Dynamic Remaining Flight Time based on active case
+    if scenario == "normal":
+        remaining_mins = takeoff_baseline_mins
+    elif scenario == "coolant_leak":
+        remaining_mins = 42.0  # ~40 mins emergency glide & throttle de-rate
+    elif scenario == "oil_starvation":
+        remaining_mins = 18.0  # ~18 mins critical bearing window
+    elif scenario == "dual_failure":
+        remaining_mins = 5.0   # Critical seizure threshold (<5 mins)
+    else:
+        remaining_mins = takeoff_baseline_mins
+
+    # Format cleanly for the dashboard display
+    hours = int(remaining_mins // 60)
+    minutes = int(remaining_mins % 60)
+    
+    if hours > 0:
+        time_display = f"{hours}h {minutes}m"
+    else:
+        time_display = f"{minutes} mins"
+
+    return time_display, round(remaining_mins, 1)
+
 class DroneTwin:
-    def __init__(self, uav_id: str, spec: EngineSpec):
+    def __init__(self, uav_id: str, profile: dict):
         self.uav_id = uav_id
-        self.spec = spec
-        self.base_rul = 120.0
+        self.profile = profile
         self.current_state = {}
 
     def step(self):
         # Generate baseline telemetry with realistic variations
-        rpm = int(self.spec.nominal_rpm + random.uniform(-40, 40))
+        rpm = int(self.profile["nominal_rpm"] + random.uniform(-40, 40))
         oil = round(random.uniform(2.8, 3.4), 2)
-        temps = [round(self.spec.max_cht - 15 + random.uniform(-3, 3), 1) for _ in range(self.spec.cylinders)]
+        temps = [round(self.profile["max_cht"] - 15 + random.uniform(-3, 3), 1) for _ in range(self.profile["cylinders"])]
 
         # Specific behavior profiles for demonstration
+        scenario = "normal"
         if self.uav_id == "RUSTOM-02":
             # Scenario: Cylinder 2 gradual thermal stress
-            temps[1] = round(self.spec.max_cht + 14.5 + random.uniform(-1, 2), 1)
+            temps[1] = round(self.profile["max_cht"] + 14.5 + random.uniform(-1, 2), 1)
+            scenario = "coolant_leak"
         elif self.uav_id == "NISHANT-03":
             # Scenario: Oil drop + dual-cylinder heat build-up
-            oil = round(self.spec.min_oil_press - 0.4 + random.uniform(-0.1, 0.1), 2)
-            temps = [round(self.spec.max_cht + 8 + random.uniform(-1, 1), 1) for _ in temps]
+            oil = round(self.profile["min_oil"] - 0.4 + random.uniform(-0.1, 0.1), 2)
+            temps = [round(self.profile["max_cht"] + 8 + random.uniform(-1, 1), 1) for _ in temps]
+            scenario = "dual_failure"
 
         # Physics evaluation
-        hot_cyls = [i + 1 for i, t in enumerate(temps) if t > self.spec.max_cht]
-        oil_critical = oil < self.spec.min_oil_press
+        hot_cyls = [i + 1 for i, t in enumerate(temps) if t > self.profile["max_cht"]]
+        oil_critical = oil < self.profile["min_oil"]
+
+        time_display, remaining_mins = compute_accurate_flight_time(self.uav_id, scenario)
 
         if hot_cyls and oil_critical:
             status = "CRITICAL FAILURE"
-            rul = max(3.0, self.base_rul * 0.05)
             action = "EMERGENCY: Max Throttle De-rate & Forced Return-To-Base"
             badge = "danger"
         elif hot_cyls:
             status = "THERMAL WARNING"
-            rul = max(25.0, self.base_rul * 0.4)
             action = f"CAUTION: De-rate throttle by 20% (High CHT on Cyl {hot_cyls})"
             badge = "warning"
         else:
             status = "NOMINAL"
-            rul = self.base_rul
             action = "Flight conditions nominal. Telemetry baseline verified."
             badge = "success"
 
         self.current_state = {
             "uav_id": self.uav_id,
-            "engine": self.spec.model,
+            "engine": self.profile["engine"],
             "rpm": rpm,
             "cht": temps,
             "oil_press": oil,
             "status": status,
             "badge": badge,
-            "rul_minutes": round(rul, 1),
+            "rul_minutes": remaining_mins,
+            "rul_display": time_display,
+            "takeoff_hours": self.profile["takeoff_avg_endurance_hours"],
             "directive": action
         }
 
 # Global fleet state manager
-fleet_twins = {uid: DroneTwin(uid, spec) for uid, spec in ENGINE_REGISTRY.items()}
+fleet_twins = {uid: DroneTwin(uid, prof) for uid, prof in FLEET_FLIGHT_PROFILES.items()}
 
 def telemetry_engine_loop():
     while True:

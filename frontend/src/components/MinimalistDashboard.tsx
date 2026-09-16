@@ -50,6 +50,7 @@ interface DroneProfile {
   code: string;
   engineModel: string;
   engineSpecs: string;
+  takeoffHours: number;
   circumstances: Record<CircumstanceKey, CircumstanceData>;
 }
 
@@ -58,20 +59,21 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
     id: "TAPAS",
     name: "Tapas",
     code: "TAPAS-01",
-    engineModel: "Rotax 914 F Turbo",
+    engineModel: "Rotax 914 F Turbocharged",
     engineSpecs: "4 Cylinders • 1.35L Turbo • Safe: <135°C, >1.5 bar",
+    takeoffHours: 24.0,
     circumstances: {
       NORMAL: {
         id: "NORMAL",
         buttonLabel: "Normal Flight",
-        buttonSub: "Everything working fine",
+        buttonSub: "Full standard MALE patrol",
         badge: "HEALTHY",
         badgeStyle: "bg-emerald-50 text-emerald-700 border-emerald-200",
         cardBorder: "border-emerald-200 ring-emerald-500/20",
         heroBg: "bg-gradient-to-b from-emerald-50/60 to-white",
-        timeLeft: "10",
-        timeUnit: "HOURS",
-        timeDesc: "Plenty of safe flight time remaining",
+        timeLeft: "24h 0m",
+        timeUnit: "(24 HOURS)",
+        timeDesc: "Full standard 24-hour MALE surveillance endurance remaining",
         timeLeftColor: "text-emerald-600",
         healthPercent: 100,
         healthLabel: "100% Healthy",
@@ -85,7 +87,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         vib: "Smooth",
         vibStatus: "No shaking",
         vibBadgeStyle: "text-emerald-700 bg-emerald-50 border-emerald-200",
-        whatHappened: "The Rotax engine is running smoothly. Air, fuel, cooling water, and oil are all in perfect condition.",
+        whatHappened: "The Rotax 914 F Turbocharged engine is running smoothly. Air, fuel, cooling water, and oil are all in perfect condition.",
         systemAction: "Keep flying on the current route at normal speed.",
         benefit: "The drone will finish its entire 24-hour mission safely."
       },
@@ -97,9 +99,9 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         badgeStyle: "bg-amber-50 text-amber-800 border-amber-200",
         cardBorder: "border-amber-300 ring-amber-500/20",
         heroBg: "bg-gradient-to-b from-amber-50/70 to-white",
-        timeLeft: "45",
-        timeUnit: "MINUTES",
-        timeDesc: "Heat is rising fast without cooling water",
+        timeLeft: "42",
+        timeUnit: "MINS",
+        timeDesc: "Emergency glide & throttle de-rate window",
         timeLeftColor: "text-amber-600",
         healthPercent: 58,
         healthLabel: "58% Warning",
@@ -115,22 +117,22 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         vibBadgeStyle: "text-emerald-700 bg-emerald-50 border-emerald-200",
         whatHappened: "Cooling water leaked out of the radiator. Without water cooling, cylinder heads are heating up past safe limits.",
         systemAction: "Slow down the throttle to 55% so cold outside air cools the engine down.",
-        benefit: "Gives the pilot +35 more minutes of flying time to reach an alternate runway."
+        benefit: "Gives the pilot 42 minutes of extended flight time to reach an alternate runway."
       },
       OIL: {
         id: "OIL",
         buttonLabel: "Oil Starvation",
-        buttonSub: "Oil is leaking / Low pressure",
+        buttonSub: "Oil line pressure collapse",
         badge: "DANGER - OIL LEAK",
         badgeStyle: "bg-rose-50 text-rose-700 border-rose-200",
         cardBorder: "border-rose-300 ring-rose-500/20",
         heroBg: "bg-gradient-to-b from-rose-50/70 to-white",
-        timeLeft: "2",
-        timeUnit: "MINUTES",
-        timeDesc: "Engine parts will jam very soon without oil",
+        timeLeft: "18",
+        timeUnit: "MINS",
+        timeDesc: "Critical bearing hydrodynamic lubrication window",
         timeLeftColor: "text-rose-600",
-        healthPercent: 12,
-        healthLabel: "12% Critical",
+        healthPercent: 18,
+        healthLabel: "18% Critical",
         healthBarColor: "bg-rose-500",
         temp: "118°C",
         tempStatus: "Friction heating up",
@@ -143,35 +145,35 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         vibBadgeStyle: "text-rose-700 bg-rose-50 border-rose-200",
         whatHappened: "An oil line leaked and oil pressure collapsed. Metal bearings are rubbing directly against crankshaft with heavy friction.",
         systemAction: "Immediately cut engine power to 30% and glide down to land on the nearest runway.",
-        benefit: "Prevents the engine from seizing in mid-air and saves the $15M aircraft."
+        benefit: "Prevents crankshaft seizure within the 18-minute critical window and saves the aircraft."
       },
       CYLINDER: {
         id: "CYLINDER",
-        buttonLabel: "Cylinder Misfire",
-        buttonSub: "1 cylinder stopped working",
-        badge: "ENGINE STUTTER",
-        badgeStyle: "bg-indigo-50 text-indigo-700 border-indigo-200",
-        cardBorder: "border-indigo-300 ring-indigo-500/20",
-        heroBg: "bg-gradient-to-b from-indigo-50/70 to-white",
-        timeLeft: "90",
-        timeUnit: "MINUTES",
-        timeDesc: "Running on 3 cylinders with loss of power",
-        timeLeftColor: "text-indigo-600",
-        healthPercent: 65,
-        healthLabel: "65% Needs Attention",
-        healthBarColor: "bg-indigo-500",
-        temp: "88°C",
-        tempStatus: "Cylinder 3 spark dead",
-        tempBadgeStyle: "text-indigo-700 bg-indigo-50 border-indigo-200",
-        oil: "4.1 bar",
-        oilStatus: "Safe & Normal",
-        oilBadgeStyle: "text-emerald-700 bg-emerald-50 border-emerald-200",
-        vib: "Shaking",
-        vibStatus: "Engine is jerking",
-        vibBadgeStyle: "text-indigo-700 bg-indigo-50 border-indigo-200",
-        whatHappened: "Cylinder 3 spark plug stopped firing. The engine is shaking because only 3 cylinders are pushing the propeller.",
-        systemAction: "Switch to the backup ignition channel to restart the spark plug.",
-        benefit: "Restores full 115 HP engine power and stops the shaking."
+        buttonLabel: "Dual / Cylinder Seizure",
+        buttonSub: "Critical threshold failure",
+        badge: "SEIZURE THREAT",
+        badgeStyle: "bg-red-50 text-red-700 border-red-200",
+        cardBorder: "border-red-300 ring-red-500/20",
+        heroBg: "bg-gradient-to-b from-red-50/70 to-white",
+        timeLeft: "5",
+        timeUnit: "MINS",
+        timeDesc: "Critical seizure threshold (<5 mins remaining)",
+        timeLeftColor: "text-red-600",
+        healthPercent: 8,
+        healthLabel: "8% Imminent Seizure",
+        healthBarColor: "bg-red-600",
+        temp: "144°C",
+        tempStatus: "Critical Overheat",
+        tempBadgeStyle: "text-red-700 bg-red-50 border-red-200",
+        oil: "0.9 bar",
+        oilStatus: "Loss of Oil Pressure",
+        oilBadgeStyle: "text-red-700 bg-red-50 border-red-200",
+        vib: "Severe Shaking",
+        vibStatus: "Mechanical grinding",
+        vibBadgeStyle: "text-red-700 bg-red-50 border-red-200",
+        whatHappened: "Severe multi-cylinder overheating combined with loss of oil pressure. Total mechanical seizure is imminent within 5 minutes.",
+        systemAction: "Initiate immediate forced Return-To-Base or deploy emergency recovery parachute.",
+        benefit: "Recovers the UAV airframe before mid-air engine lockup."
       }
     }
   },
@@ -181,18 +183,19 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
     code: "RUSTOM-02",
     engineModel: "Lycoming O-320",
     engineSpecs: "4 Cylinders • 5.2L Air-Cooled • Safe: <240°C, >2.0 bar",
+    takeoffHours: 22.0,
     circumstances: {
       NORMAL: {
         id: "NORMAL",
         buttonLabel: "Normal Flight",
-        buttonSub: "Cruising nominally",
+        buttonSub: "22 Hours standard loiter",
         badge: "HEALTHY",
         badgeStyle: "bg-emerald-50 text-emerald-700 border-emerald-200",
         cardBorder: "border-emerald-200 ring-emerald-500/20",
         heroBg: "bg-gradient-to-b from-emerald-50/60 to-white",
-        timeLeft: "8",
-        timeUnit: "HOURS",
-        timeDesc: "Full fuel range and nominal engine wear",
+        timeLeft: "22h 0m",
+        timeUnit: "(22 HOURS)",
+        timeDesc: "Full standard 22-hour loiter endurance remaining",
         timeLeftColor: "text-emerald-600",
         healthPercent: 100,
         healthLabel: "100% Healthy",
@@ -208,7 +211,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         vibBadgeStyle: "text-emerald-700 bg-emerald-50 border-emerald-200",
         whatHappened: "The Lycoming O-320 engine is operating within standard aeronautical parameters. All 4 cylinders burning evenly.",
         systemAction: "Maintain standard cruise altitude and heading.",
-        benefit: "Ensures full mission completion with zero maintenance intervention."
+        benefit: "Ensures full 22-hour loiter mission completion with zero maintenance intervention."
       },
       COOLANT: {
         id: "COOLANT",
@@ -218,9 +221,9 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         badgeStyle: "bg-amber-50 text-amber-800 border-amber-200",
         cardBorder: "border-amber-300 ring-amber-500/20",
         heroBg: "bg-gradient-to-b from-amber-50/70 to-white",
-        timeLeft: "35",
-        timeUnit: "MINUTES",
-        timeDesc: "Cylinder 2 exceeds 240°C maximum limit",
+        timeLeft: "42",
+        timeUnit: "MINS",
+        timeDesc: "Emergency glide & throttle de-rate window",
         timeLeftColor: "text-amber-600",
         healthPercent: 54,
         healthLabel: "54% Warning",
@@ -236,7 +239,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         vibBadgeStyle: "text-amber-800 bg-amber-50 border-amber-200",
         whatHappened: "Air baffle around Cylinder 2 came loose. Cylinder 2 is not receiving sufficient ram airflow and is overheating.",
         systemAction: "De-rate engine throttle by 20% and pitch nose down slightly to force cooling ram air.",
-        benefit: "Drops Cylinder 2 temperature below 230°C and avoids piston crown melting."
+        benefit: "Drops Cylinder 2 temperature below 230°C and provides 42 minutes to return to base."
       },
       OIL: {
         id: "OIL",
@@ -246,12 +249,12 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         badgeStyle: "bg-rose-50 text-rose-700 border-rose-200",
         cardBorder: "border-rose-300 ring-rose-500/20",
         heroBg: "bg-gradient-to-b from-rose-50/70 to-white",
-        timeLeft: "3",
-        timeUnit: "MINUTES",
-        timeDesc: "Severe oil pressure drop below 2.0 bar",
+        timeLeft: "18",
+        timeUnit: "MINS",
+        timeDesc: "Critical bearing hydrodynamic lubrication window",
         timeLeftColor: "text-rose-600",
-        healthPercent: 15,
-        healthLabel: "15% Critical",
+        healthPercent: 18,
+        healthLabel: "18% Critical",
         healthBarColor: "bg-rose-500",
         temp: "220°C",
         tempStatus: "Friction heat",
@@ -264,35 +267,35 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         vibBadgeStyle: "text-rose-700 bg-rose-50 border-rose-200",
         whatHappened: "Oil pump relief valve stuck open. Oil pressure collapsed from 4.8 bar to 1.4 bar, starving journal bearings.",
         systemAction: "Execute immediate glide landing and trim engine throttle to minimum idle.",
-        benefit: "Prevents crankshaft seizure and ensures safe airframe recovery."
+        benefit: "Prevents crankshaft seizure during the 18-minute bearing safety window."
       },
       CYLINDER: {
         id: "CYLINDER",
-        buttonLabel: "Cylinder Misfire",
-        buttonSub: "Cylinder 2 intermittent spark",
-        badge: "ENGINE STUTTER",
-        badgeStyle: "bg-indigo-50 text-indigo-700 border-indigo-200",
-        cardBorder: "border-indigo-300 ring-indigo-500/20",
-        heroBg: "bg-gradient-to-b from-indigo-50/70 to-white",
-        timeLeft: "60",
-        timeUnit: "MINUTES",
-        timeDesc: "Magneto ignition fault on Cylinder 2",
-        timeLeftColor: "text-indigo-600",
-        healthPercent: 62,
-        healthLabel: "62% Needs Attention",
-        healthBarColor: "bg-indigo-500",
-        temp: "160°C",
-        tempStatus: "Cylinder 2 cold misfire",
-        tempBadgeStyle: "text-indigo-700 bg-indigo-50 border-indigo-200",
-        oil: "4.5 bar",
-        oilStatus: "Safe & Normal",
-        oilBadgeStyle: "text-emerald-700 bg-emerald-50 border-emerald-200",
-        vib: "Shaking",
-        vibStatus: "Combustion knock",
-        vibBadgeStyle: "text-indigo-700 bg-indigo-50 border-indigo-200",
-        whatHappened: "Left magneto ignition lead for Cylinder 2 fouled. Engine is vibrating due to asymmetric cylinder power strokes.",
-        systemAction: "Switch ignition key from BOTH to RIGHT magneto to isolate clean ignition circuit.",
-        benefit: "Restores smooth 4-cylinder firing sequence and stabilizes flight."
+        buttonLabel: "Dual / Cylinder Seizure",
+        buttonSub: "Critical threshold failure",
+        badge: "SEIZURE THREAT",
+        badgeStyle: "bg-red-50 text-red-700 border-red-200",
+        cardBorder: "border-red-300 ring-red-500/20",
+        heroBg: "bg-gradient-to-b from-red-50/70 to-white",
+        timeLeft: "5",
+        timeUnit: "MINS",
+        timeDesc: "Critical seizure threshold (<5 mins remaining)",
+        timeLeftColor: "text-red-600",
+        healthPercent: 8,
+        healthLabel: "8% Imminent Seizure",
+        healthBarColor: "bg-red-600",
+        temp: "265°C",
+        tempStatus: "Extreme Thermal Stress",
+        tempBadgeStyle: "text-red-700 bg-red-50 border-red-200",
+        oil: "1.1 bar",
+        oilStatus: "Critical Low Pressure",
+        oilBadgeStyle: "text-red-700 bg-red-50 border-red-200",
+        vib: "Violent Vibration",
+        vibStatus: "Bearing failure",
+        vibBadgeStyle: "text-red-700 bg-red-50 border-red-200",
+        whatHappened: "Cylinder head thermal breakdown combined with severe friction. Complete engine seizure will occur in under 5 minutes.",
+        systemAction: "Immediately de-rate throttle and execute forced Return-To-Base.",
+        benefit: "Safeguards the UAV airframe before engine freezes."
       }
     }
   },
@@ -300,20 +303,21 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
     id: "NISHANT",
     name: "Nishant",
     code: "NISHANT-03",
-    engineModel: "Rotary / Twin Benchmark",
+    engineModel: "REI AR-731 Rotary/Twin",
     engineSpecs: "2 Rotors • High-RPM Wankel • Safe: <180°C, >1.8 bar",
+    takeoffHours: 4.5,
     circumstances: {
       NORMAL: {
         id: "NORMAL",
         buttonLabel: "Normal Flight",
-        buttonSub: "Tactical sortie nominal",
+        buttonSub: "4.5 Hours tactical loiter",
         badge: "HEALTHY",
         badgeStyle: "bg-emerald-50 text-emerald-700 border-emerald-200",
         cardBorder: "border-emerald-200 ring-emerald-500/20",
         heroBg: "bg-gradient-to-b from-emerald-50/60 to-white",
-        timeLeft: "6",
-        timeUnit: "HOURS",
-        timeDesc: "High-RPM rotary running at nominal balance",
+        timeLeft: "4h 30m",
+        timeUnit: "(4.5 HOURS)",
+        timeDesc: "Full 4.5-hour tactical loiter endurance remaining",
         timeLeftColor: "text-emerald-600",
         healthPercent: 100,
         healthLabel: "100% Healthy",
@@ -327,9 +331,9 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         vib: "Smooth",
         vibStatus: "Balanced rotary motion",
         vibBadgeStyle: "text-emerald-700 bg-emerald-50 border-emerald-200",
-        whatHappened: "Twin rotary engine spinning smoothly at 6,500 RPM. Apex seal lubrication and cooling jackets optimal.",
+        whatHappened: "The REI AR-731 Rotary/Twin engine is spinning smoothly at 6,500 RPM. Apex seal lubrication and cooling jackets optimal.",
         systemAction: "Continue tactical battlefield surveillance mission.",
-        benefit: "Provides 100% planned surveillance time over target area."
+        benefit: "Provides full 4.5 hours of planned tactical loiter time over target area."
       },
       COOLANT: {
         id: "COOLANT",
@@ -339,9 +343,9 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         badgeStyle: "bg-amber-50 text-amber-800 border-amber-200",
         cardBorder: "border-amber-300 ring-amber-500/20",
         heroBg: "bg-gradient-to-b from-amber-50/70 to-white",
-        timeLeft: "20",
-        timeUnit: "MINUTES",
-        timeDesc: "Housing temperature exceeds 180°C limit",
+        timeLeft: "42",
+        timeUnit: "MINS",
+        timeDesc: "Emergency glide & throttle de-rate window",
         timeLeftColor: "text-amber-600",
         healthPercent: 45,
         healthLabel: "45% Warning",
@@ -355,9 +359,9 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         vib: "Moderate",
         vibStatus: "Housing thermal warpage",
         vibBadgeStyle: "text-amber-800 bg-amber-50 border-amber-200",
-        whatHappened: "Coolant pump belt slipped. Temperature in both rotary combustion chambers exceeded the 180°C safe threshold.",
+        whatHappened: "Coolant pump belt slipped. Temperature in rotary combustion chambers exceeded the 180°C safe threshold.",
         systemAction: "Reduce engine RPM from 6,500 to 5,200 and begin descent to lower, cooler ambient air.",
-        benefit: "Stabilizes rotor temperature and buys +25 minutes to land."
+        benefit: "Stabilizes rotor temperature and secures 42 minutes to recover."
       },
       OIL: {
         id: "OIL",
@@ -367,12 +371,12 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         badgeStyle: "bg-rose-50 text-rose-700 border-rose-200",
         cardBorder: "border-rose-300 ring-rose-500/20",
         heroBg: "bg-gradient-to-b from-rose-50/70 to-white",
-        timeLeft: "1.5",
-        timeUnit: "MINUTES",
-        timeDesc: "Severe oil loss: apex seal destruction imminent",
+        timeLeft: "18",
+        timeUnit: "MINS",
+        timeDesc: "Critical bearing hydrodynamic lubrication window",
         timeLeftColor: "text-rose-600",
-        healthPercent: 8,
-        healthLabel: "8% Critical",
+        healthPercent: 18,
+        healthLabel: "18% Critical",
         healthBarColor: "bg-rose-500",
         temp: "175°C",
         tempStatus: "High friction",
@@ -385,35 +389,35 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         vibBadgeStyle: "text-rose-700 bg-rose-50 border-rose-200",
         whatHappened: "Oil metering pump failed. Rotary apex seals have lost all lubrication and are grinding against trochoid chamber walls.",
         systemAction: "Deploy recovery parachute or initiate emergency glide landing immediately.",
-        benefit: "Saves airframe and payloads from total in-flight engine explosion."
+        benefit: "Recovers the drone within the 18-minute bearing safety margin."
       },
       CYLINDER: {
         id: "CYLINDER",
-        buttonLabel: "Rotor Misfire",
-        buttonSub: "Rotor 2 compression loss",
-        badge: "ENGINE STUTTER",
-        badgeStyle: "bg-indigo-50 text-indigo-700 border-indigo-200",
-        cardBorder: "border-indigo-300 ring-indigo-500/20",
-        heroBg: "bg-gradient-to-b from-indigo-50/70 to-white",
-        timeLeft: "40",
-        timeUnit: "MINUTES",
-        timeDesc: "Power reduced by 50% on single rotor",
-        timeLeftColor: "text-indigo-600",
-        healthPercent: 52,
-        healthLabel: "52% Needs Attention",
-        healthBarColor: "bg-indigo-500",
-        temp: "120°C",
-        tempStatus: "Rotor 2 incomplete burn",
-        tempBadgeStyle: "text-indigo-700 bg-indigo-50 border-indigo-200",
-        oil: "3.0 bar",
-        oilStatus: "Safe & Normal",
-        oilBadgeStyle: "text-emerald-700 bg-emerald-50 border-emerald-200",
-        vib: "Heavy Pulsing",
-        vibStatus: "Single-rotor torque pulses",
-        vibBadgeStyle: "text-indigo-700 bg-indigo-50 border-indigo-200",
-        whatHappened: "Secondary spark coil on Rotor 2 failed. Power output dropped 50% and engine is pulsing heavily.",
-        systemAction: "Trim airspeed to best glide/endurance speed and turn back towards recovery base.",
-        benefit: "Maintains flight control and avoids engine stall."
+        buttonLabel: "Dual / Rotor Seizure",
+        buttonSub: "Critical threshold failure",
+        badge: "SEIZURE THREAT",
+        badgeStyle: "bg-red-50 text-red-700 border-red-200",
+        cardBorder: "border-red-300 ring-red-500/20",
+        heroBg: "bg-gradient-to-b from-red-50/70 to-white",
+        timeLeft: "5",
+        timeUnit: "MINS",
+        timeDesc: "Critical seizure threshold (<5 mins remaining)",
+        timeLeftColor: "text-red-600",
+        healthPercent: 8,
+        healthLabel: "8% Imminent Seizure",
+        healthBarColor: "bg-red-600",
+        temp: "198°C",
+        tempStatus: "Housing Overheat",
+        tempBadgeStyle: "text-red-700 bg-red-50 border-red-200",
+        oil: "0.8 bar",
+        oilStatus: "Complete Pressure Loss",
+        oilBadgeStyle: "text-red-700 bg-red-50 border-red-200",
+        vib: "Destructive Vibration",
+        vibStatus: "Apex seal shatter",
+        vibBadgeStyle: "text-red-700 bg-red-50 border-red-200",
+        whatHappened: "Dual rotary apex seal breakdown combined with oil starvation. Total engine seizure will occur within 5 minutes.",
+        systemAction: "Immediately de-rate throttle and execute emergency recovery.",
+        benefit: "Saves airframe and payloads from mid-air destruction."
       }
     }
   }
@@ -459,7 +463,6 @@ export const MinimalistDashboard: React.FC = () => {
                     key={key}
                     onClick={() => {
                       setSelectedDroneKey(key);
-                      // Keep the same circumstance or reset if desired
                     }}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                       isActive 
@@ -483,7 +486,7 @@ export const MinimalistDashboard: React.FC = () => {
                   {currentDrone.engineModel}
                 </div>
                 <div className="text-[9px] text-zinc-500 font-medium leading-tight">
-                  {currentDrone.code}
+                  {currentDrone.code} • {currentDrone.takeoffHours}h Loiter
                 </div>
               </div>
             </div>
@@ -541,7 +544,7 @@ export const MinimalistDashboard: React.FC = () => {
             <div>
               <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1">
                 <Clock className="w-4 h-4 text-blue-600" />
-                <span>Time Left to Fly ({currentDrone.name})</span>
+                <span>Accurate Flight Time Left ({currentDrone.name})</span>
               </div>
               <div className="flex items-baseline gap-2">
                 <span className={`text-5xl sm:text-6xl font-black tracking-tight ${data.timeLeftColor}`}>
@@ -649,7 +652,7 @@ export const MinimalistDashboard: React.FC = () => {
 
         {/* Clean Footer */}
         <footer className="text-center text-xs text-zinc-400 py-3">
-          AeroGuard UAV Fleet Engine Health Monitor • {currentDrone.name} ({currentDrone.engineModel})
+          AeroGuard UAV Fleet Engine Health Monitor • {currentDrone.name} ({currentDrone.engineModel}) • Takeoff Baseline: {currentDrone.takeoffHours}h
         </footer>
 
       </div>
