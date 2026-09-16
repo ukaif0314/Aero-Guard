@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from "react";
 import { 
@@ -71,9 +71,9 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         badgeStyle: "bg-emerald-50 text-emerald-700 border-emerald-200",
         cardBorder: "border-emerald-200 ring-emerald-500/20",
         heroBg: "bg-gradient-to-b from-emerald-50/60 to-white",
-        timeLeft: "24h 0m",
-        timeUnit: "(24 HOURS)",
-        timeDesc: "Full standard 24-hour MALE surveillance endurance remaining",
+        timeLeft: "24",
+        timeUnit: "HOURS",
+        timeDesc: "Full standard 24 hours of flight endurance remaining",
         timeLeftColor: "text-emerald-600",
         healthPercent: 100,
         healthLabel: "100% Healthy",
@@ -100,7 +100,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         cardBorder: "border-amber-300 ring-amber-500/20",
         heroBg: "bg-gradient-to-b from-amber-50/70 to-white",
         timeLeft: "42",
-        timeUnit: "MINS",
+        timeUnit: "MINUTES",
         timeDesc: "Emergency glide & throttle de-rate window",
         timeLeftColor: "text-amber-600",
         healthPercent: 58,
@@ -128,7 +128,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         cardBorder: "border-rose-300 ring-rose-500/20",
         heroBg: "bg-gradient-to-b from-rose-50/70 to-white",
         timeLeft: "18",
-        timeUnit: "MINS",
+        timeUnit: "MINUTES",
         timeDesc: "Critical bearing hydrodynamic lubrication window",
         timeLeftColor: "text-rose-600",
         healthPercent: 18,
@@ -156,7 +156,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         cardBorder: "border-red-300 ring-red-500/20",
         heroBg: "bg-gradient-to-b from-red-50/70 to-white",
         timeLeft: "5",
-        timeUnit: "MINS",
+        timeUnit: "MINUTES",
         timeDesc: "Critical seizure threshold (<5 mins remaining)",
         timeLeftColor: "text-red-600",
         healthPercent: 8,
@@ -193,9 +193,9 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         badgeStyle: "bg-emerald-50 text-emerald-700 border-emerald-200",
         cardBorder: "border-emerald-200 ring-emerald-500/20",
         heroBg: "bg-gradient-to-b from-emerald-50/60 to-white",
-        timeLeft: "22h 0m",
-        timeUnit: "(22 HOURS)",
-        timeDesc: "Full standard 22-hour loiter endurance remaining",
+        timeLeft: "22",
+        timeUnit: "HOURS",
+        timeDesc: "Full standard 22 hours of flight loiter remaining",
         timeLeftColor: "text-emerald-600",
         healthPercent: 100,
         healthLabel: "100% Healthy",
@@ -222,7 +222,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         cardBorder: "border-amber-300 ring-amber-500/20",
         heroBg: "bg-gradient-to-b from-amber-50/70 to-white",
         timeLeft: "42",
-        timeUnit: "MINS",
+        timeUnit: "MINUTES",
         timeDesc: "Emergency glide & throttle de-rate window",
         timeLeftColor: "text-amber-600",
         healthPercent: 54,
@@ -250,7 +250,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         cardBorder: "border-rose-300 ring-rose-500/20",
         heroBg: "bg-gradient-to-b from-rose-50/70 to-white",
         timeLeft: "18",
-        timeUnit: "MINS",
+        timeUnit: "MINUTES",
         timeDesc: "Critical bearing hydrodynamic lubrication window",
         timeLeftColor: "text-rose-600",
         healthPercent: 18,
@@ -278,7 +278,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         cardBorder: "border-red-300 ring-red-500/20",
         heroBg: "bg-gradient-to-b from-red-50/70 to-white",
         timeLeft: "5",
-        timeUnit: "MINS",
+        timeUnit: "MINUTES",
         timeDesc: "Critical seizure threshold (<5 mins remaining)",
         timeLeftColor: "text-red-600",
         healthPercent: 8,
@@ -305,19 +305,19 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
     code: "NISHANT-03",
     engineModel: "REI AR-731 Rotary/Twin",
     engineSpecs: "2 Rotors • High-RPM Wankel • Safe: <180°C, >1.8 bar",
-    takeoffHours: 4.5,
+    takeoffHours: 5,
     circumstances: {
       NORMAL: {
         id: "NORMAL",
         buttonLabel: "Normal Flight",
-        buttonSub: "4.5 Hours tactical loiter",
+        buttonSub: "5 Hours tactical loiter",
         badge: "HEALTHY",
         badgeStyle: "bg-emerald-50 text-emerald-700 border-emerald-200",
         cardBorder: "border-emerald-200 ring-emerald-500/20",
         heroBg: "bg-gradient-to-b from-emerald-50/60 to-white",
-        timeLeft: "4h 30m",
-        timeUnit: "(4.5 HOURS)",
-        timeDesc: "Full 4.5-hour tactical loiter endurance remaining",
+        timeLeft: "5",
+        timeUnit: "HOURS",
+        timeDesc: "Full standard 5 hours of tactical loiter remaining",
         timeLeftColor: "text-emerald-600",
         healthPercent: 100,
         healthLabel: "100% Healthy",
@@ -333,7 +333,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         vibBadgeStyle: "text-emerald-700 bg-emerald-50 border-emerald-200",
         whatHappened: "The REI AR-731 Rotary/Twin engine is spinning smoothly at 6,500 RPM. Apex seal lubrication and cooling jackets optimal.",
         systemAction: "Continue tactical battlefield surveillance mission.",
-        benefit: "Provides full 4.5 hours of planned tactical loiter time over target area."
+        benefit: "Provides full 5 hours of planned tactical loiter time over target area."
       },
       COOLANT: {
         id: "COOLANT",
@@ -344,7 +344,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         cardBorder: "border-amber-300 ring-amber-500/20",
         heroBg: "bg-gradient-to-b from-amber-50/70 to-white",
         timeLeft: "42",
-        timeUnit: "MINS",
+        timeUnit: "MINUTES",
         timeDesc: "Emergency glide & throttle de-rate window",
         timeLeftColor: "text-amber-600",
         healthPercent: 45,
@@ -372,7 +372,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         cardBorder: "border-rose-300 ring-rose-500/20",
         heroBg: "bg-gradient-to-b from-rose-50/70 to-white",
         timeLeft: "18",
-        timeUnit: "MINS",
+        timeUnit: "MINUTES",
         timeDesc: "Critical bearing hydrodynamic lubrication window",
         timeLeftColor: "text-rose-600",
         healthPercent: 18,
@@ -400,7 +400,7 @@ const DRONE_FLEET: Record<DroneKey, DroneProfile> = {
         cardBorder: "border-red-300 ring-red-500/20",
         heroBg: "bg-gradient-to-b from-red-50/70 to-white",
         timeLeft: "5",
-        timeUnit: "MINS",
+        timeUnit: "MINUTES",
         timeDesc: "Critical seizure threshold (<5 mins remaining)",
         timeLeftColor: "text-red-600",
         healthPercent: 8,
@@ -486,7 +486,7 @@ export const MinimalistDashboard: React.FC = () => {
                   {currentDrone.engineModel}
                 </div>
                 <div className="text-[9px] text-zinc-500 font-medium leading-tight">
-                  {currentDrone.code} • {currentDrone.takeoffHours}h Loiter
+                  {currentDrone.code} • {currentDrone.takeoffHours} Hours
                 </div>
               </div>
             </div>
@@ -652,7 +652,7 @@ export const MinimalistDashboard: React.FC = () => {
 
         {/* Clean Footer */}
         <footer className="text-center text-xs text-zinc-400 py-3">
-          AeroGuard UAV Fleet Engine Health Monitor • {currentDrone.name} ({currentDrone.engineModel}) • Takeoff Baseline: {currentDrone.takeoffHours}h
+          AeroGuard UAV Fleet Engine Health Monitor • {currentDrone.name} ({currentDrone.engineModel}) • Takeoff Baseline: {currentDrone.takeoffHours} Hours
         </footer>
 
       </div>
