@@ -1,9 +1,9 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "DRDO TAPAS-BH-201 | Aero Piston Engine Digital Twin GCS",
-  description: "Tactical Ground Control Station & Real-Time Digital Twin for MALE UAV Aero Piston Engines (DRDO Problem Statement SIH26054)",
+  title: "AeroGuard | DRDO UAV Aero Piston Engine Fleet Digital Twin",
+  description: "Tactical Health Monitor & Real-Time Digital Twin for DRDO Tapas, Rustom, and Nishant UAV Engines",
 };
 
 export default function RootLayout({
